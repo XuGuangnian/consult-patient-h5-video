@@ -114,6 +114,11 @@ const router = createRouter({
           path: '/user',
           component: () => import('@/views/User/index.vue'),
           meta: { title: '个人中心' }
+        },
+        {
+          path: '/consult/medicine',
+          component: () => import('@/views/Consult/ConsultMedicine.vue'),
+          meta: { title: '开药门诊' }
         }
       ]
     }

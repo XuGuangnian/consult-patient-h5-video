@@ -1,4 +1,12 @@
-import type { ConsultType, IllnessTime, OrderType } from '@/enums'
+import type {
+  AllergicHistory,
+  ConsultType,
+  FertilityStatus,
+  IllnessTime,
+  LiverFunction,
+  OrderType,
+  RenalFunction
+} from '@/enums'
 import type { Patient } from './user'
 
 // 文章信息类型
@@ -125,6 +133,14 @@ export type Consult = {
   patientId: string
   /** 优惠券ID */
   couponId: string
+  /** 肝功能 */
+  liverFunction: LiverFunction
+  /** 肾功能 */
+  renalFunction: RenalFunction
+  /** 过敏史 */
+  allergicHistory: AllergicHistory
+  /** 生育状态及计划 */
+  fertilityStatus: FertilityStatus
 }
 
 // Partial<T> 把一个对象的属性转换成可选
@@ -146,6 +162,16 @@ type TopDep = SubDep & {
 type ConsultIllness = Pick<
   PartialConsult,
   'illnessDesc' | 'illnessTime' | 'consultFlag' | 'pictures'
+>
+
+export type MedicineIllness = Pick<
+  PartialConsult,
+  | 'illnessDesc'
+  | 'liverFunction'
+  | 'renalFunction'
+  | 'allergicHistory'
+  | 'fertilityStatus'
+  | 'pictures'
 >
 
 // 问诊订单预支付传参
