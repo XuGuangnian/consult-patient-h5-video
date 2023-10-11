@@ -5,9 +5,11 @@ import {
   fertilityStatusOptions,
   renalFunctionOptions
 } from '@/services/constants'
+import { useConsultStore } from '@/stores'
 import type { MedicineIllness, Image } from '@/types/consult'
-import type { UploaderFileListItem } from 'vant'
-import { ref } from 'vue'
+import { showToast, type UploaderFileListItem } from 'vant'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const form = ref<MedicineIllness>({
   illnessDesc: '',
@@ -25,6 +27,33 @@ const onDeleteSuccess = (item: UploaderFileListItem) => {
   form.value.pictures = form.value.pictures?.filter(
     (pic) => pic.url !== item.url
   )
+}
+
+const disabled = computed(
+  () =>
+    !form.value.illnessDesc ||
+    form.value.liverFunction === undefined ||
+    form.value.renalFunction === undefined ||
+    form.value.allergicHistory === undefined ||
+    form.value.fertilityStatus === undefined
+)
+
+const store = useConsultStore()
+const router = useRouter()
+const next = () => {
+  if (!form.value.illnessDesc) return showToast('请输入病情描述')
+  if (form.value.liverFunction === undefined)
+    return showToast('请选择肝功能情况')
+  if (form.value.renalFunction === undefined)
+    return showToast('请选择肾功能情况')
+  if (form.value.allergicHistory === undefined)
+    return showToast('请选择过敏史情况')
+  if (form.value.fertilityStatus === undefined)
+    return showToast('请选择生育状态及计划')
+  //  记录病情
+  store.setMedicineIlness(form.value)
+  // 跳转，携带标识
+  router.push('/user/patient?isChange=1&from=medicineConsult')
 }
 </script>
 
@@ -81,7 +110,15 @@ const onDeleteSuccess = (item: UploaderFileListItem) => {
         @delete-success="onDeleteSuccess"
       ></cp-upload>
       <!-- 下一步 -->
-      <!-- <van-button type="primary" block round> 下一步 </van-button> -->
+      <van-button
+        :class="{ disabled }"
+        type="primary"
+        block
+        round
+        @click="next"
+      >
+        下一步
+      </van-button>
     </div>
   </div>
 </template>
