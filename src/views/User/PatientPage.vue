@@ -108,6 +108,7 @@ const remove = async () => {
 // 是不是选择患者
 const route = useRoute()
 const isChange = computed(() => route.query.isChange === '1')
+
 // 选择效果
 const patientId = ref<string>()
 const selectedPatient = (item: Patient) => {
@@ -117,10 +118,17 @@ const selectedPatient = (item: Patient) => {
 }
 // 下一步
 const store = useConsultStore()
+const fromMedicineConsultFlag = computed(
+  () => route.query.from === 'medicineConsult'
+)
 const next = () => {
   if (!patientId.value) return showToast('请选择患者')
   store.setPatient(patientId.value)
-  router.push('/consult/pay')
+  if (fromMedicineConsultFlag.value) {
+    router.push('/consult/choose')
+  } else {
+    router.push('/consult/pay')
+  }
 }
 </script>
 
