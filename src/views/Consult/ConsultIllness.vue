@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { flagOptions, timeOptions } from '@/services/constants'
-import { uploadImage } from '@/services/consult'
 import { useConsultStore } from '@/stores'
-import type { ConsultIllness, Image } from '@/types/consult'
-import { showConfirmDialog, showToast } from 'vant'
-import type {
-  UploaderAfterRead,
-  UploaderFileListItem
-} from 'vant/lib/uploader/types'
+import type { ConsultIllness } from '@/types/consult'
+import { showConfirmDialog, showToast, type UploaderFileListItem } from 'vant'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import type { Image } from '@/types/consult'
 
 // 病情描述对象
 const form = ref<ConsultIllness>({
@@ -18,34 +14,6 @@ const form = ref<ConsultIllness>({
   consultFlag: undefined,
   pictures: []
 })
-
-// 上传图片
-const fileList = ref<Image[]>([])
-// 图片上传
-const onAfterRead: UploaderAfterRead = (item) => {
-  if (Array.isArray(item)) return
-  if (!item.file) return
-
-  item.status = 'uploading'
-  item.message = '上传中...'
-  uploadImage(item.file)
-    .then((res) => {
-      item.status = 'done'
-      item.message = undefined
-      item.url = res.data.url
-      // 同步数据
-      form.value.pictures?.push(res.data)
-    })
-    .catch(() => {
-      item.status = 'failed'
-      item.message = '上传失败'
-    })
-}
-const onDeleteImg = (item: UploaderFileListItem) => {
-  form.value.pictures = form.value.pictures?.filter(
-    (pic) => pic.url !== item.url
-  )
-}
 
 const disabled = computed(
   () =>
@@ -78,10 +46,20 @@ onMounted(() => {
       // 回显数据
       const { illnessDesc, illnessTime, consultFlag, pictures } = store.consult
       form.value = { illnessDesc, illnessTime, consultFlag, pictures }
-      fileList.value = pictures || []
+      // fileList.value = pictures || []
+      cpUploadRef.value.setFileList(pictures || [])
     })
   }
 })
+const cpUploadRef = ref()
+const onUploadSuccess = (image: Image) => {
+  form.value.pictures?.push(image)
+}
+const onDeleteSuccess = (item: UploaderFileListItem) => {
+  form.value.pictures = form.value.pictures?.filter(
+    (pic) => pic.url !== item.url
+  )
+}
 </script>
 
 <template>
@@ -117,20 +95,11 @@ onMounted(() => {
         <cp-radio-btn :options="flagOptions" v-model="form.consultFlag" />
       </div>
       <!-- 上传组件 -->
-      <div class="illness-img">
-        <van-uploader
-          upload-icon="photo-o"
-          upload-text="上传图片"
-          max-count="9"
-          :max-size="5 * 1024 * 1024"
-          v-model="fileList"
-          :after-read="onAfterRead"
-          @delete="onDeleteImg"
-        ></van-uploader>
-        <p class="tip" v-if="!fileList.length">
-          上传内容仅医生可见,最多9张图,最大5MB
-        </p>
-      </div>
+      <cp-upload
+        ref="cpUploadRef"
+        @upload-success="onUploadSuccess"
+        @delete-success="onDeleteSuccess"
+      ></cp-upload>
       <!-- 下一步 -->
       <van-button
         @click="next"
@@ -156,43 +125,6 @@ onMounted(() => {
       background: #fafafa;
       color: #d9dbde;
       border: #fafafa;
-    }
-  }
-}
-.illness-img {
-  padding-top: 16px;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  .tip {
-    font-size: 12px;
-    color: var(--cp-tip);
-  }
-  ::v-deep() {
-    .van-uploader {
-      &__preview {
-        &-delete {
-          left: -6px;
-          top: -6px;
-          border-radius: 50%;
-          background-color: var(--cp-primary);
-          width: 20px;
-          height: 20px;
-          &-icon {
-            transform: scale(0.9) translate(-22%, 22%);
-          }
-        }
-        &-image {
-          border-radius: 8px;
-          overflow: hidden;
-        }
-      }
-      &__upload {
-        border-radius: 8px;
-      }
-      &__upload-icon {
-        color: var(--cp-text3);
-      }
     }
   }
 }
