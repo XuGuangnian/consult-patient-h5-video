@@ -91,6 +91,16 @@ const router = createRouter({
       meta: { title: '三方登录' }
     },
     {
+      path: '/consult/medicine',
+      component: () => import('@/views/Consult/ConsultMedicine.vue'),
+      meta: { title: '开药门诊' }
+    },
+    {
+      path: '/consult/choose',
+      component: () => import('@/views/Consult/ConsultChoose.vue'),
+      meta: { title: '选择药品' }
+    },
+    {
       path: '/',
       redirect: '/home',
       component: () => import('@/views/Layout/index.vue'),
@@ -114,16 +124,6 @@ const router = createRouter({
           path: '/user',
           component: () => import('@/views/User/index.vue'),
           meta: { title: '个人中心' }
-        },
-        {
-          path: '/consult/medicine',
-          component: () => import('@/views/Consult/ConsultMedicine.vue'),
-          meta: { title: '开药门诊' }
-        },
-        {
-          path: '/consult/choose',
-          component: () => import('@/views/Consult/ConsultChoose.vue'),
-          meta: { title: '选择药品' }
         }
       ]
     }
