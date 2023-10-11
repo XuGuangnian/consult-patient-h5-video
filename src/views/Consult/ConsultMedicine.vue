@@ -5,7 +5,8 @@ import {
   fertilityStatusOptions,
   renalFunctionOptions
 } from '@/services/constants'
-import type { MedicineIllness } from '@/types/consult'
+import type { MedicineIllness, Image } from '@/types/consult'
+import type { UploaderFileListItem } from 'vant'
 import { ref } from 'vue'
 
 const form = ref<MedicineIllness>({
@@ -16,6 +17,15 @@ const form = ref<MedicineIllness>({
   fertilityStatus: undefined,
   pictures: []
 })
+
+const onUploadSuccess = (image: Image) => {
+  form.value.pictures?.push(image)
+}
+const onDeleteSuccess = (item: UploaderFileListItem) => {
+  form.value.pictures = form.value.pictures?.filter(
+    (pic) => pic.url !== item.url
+  )
+}
 </script>
 
 <template>
@@ -65,7 +75,11 @@ const form = ref<MedicineIllness>({
       </div>
       <div class="adm-list-header">补充病例信息</div>
       <!-- 上传组件 -->
-      <div class="illness-img"></div>
+      <cp-upload
+        ref="cpUploadRef"
+        @upload-success="onUploadSuccess"
+        @delete-success="onDeleteSuccess"
+      ></cp-upload>
       <!-- 下一步 -->
       <!-- <van-button type="primary" block round> 下一步 </van-button> -->
     </div>
