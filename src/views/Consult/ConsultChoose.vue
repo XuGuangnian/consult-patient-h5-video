@@ -6,7 +6,7 @@ const value = ref('')
 const onSearch = (val: string) => showToast(val)
 const onCancel = () => showToast('取消')
 
-const step = ref(1)
+const step = ref(0)
 </script>
 
 <template>
@@ -27,7 +27,11 @@ const step = ref(1)
           <p class="name">
             <span>优赛明 维生素E乳 {{ i }}</span>
             <span>
-              <van-stepper v-model="step" />
+              <van-stepper
+                v-model="step"
+                min="0"
+                :class="{ hide: step === 0 }"
+              />
             </span>
           </p>
           <p class="size">
@@ -113,6 +117,14 @@ const step = ref(1)
         margin-top: 10px;
         padding: 4px 10px;
         color: var(--cp-tip);
+      }
+      .hide {
+        :deep() {
+          .van-stepper__minus,
+          .van-stepper__input {
+            visibility: hidden;
+          }
+        }
       }
     }
   }
