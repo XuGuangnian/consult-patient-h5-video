@@ -15,11 +15,17 @@ const onCancel = () => {
 const consultStore = useConsultStore()
 const totalPrice = computed(() => {
   return consultStore.consult.medicines
+    ?.filter((item) => +item.quantity > 0)
     ?.reduce((sum, item) => {
       return (sum += +item.amount * +item.quantity)
     }, 0)
     .toFixed(2)
 })
+const cartLength = computed(
+  () =>
+    consultStore.consult.medicines?.filter((item) => +item.quantity > 0)
+      .length || 0
+)
 </script>
 
 <template>
@@ -37,7 +43,8 @@ const totalPrice = computed(() => {
     <van-action-bar>
       <van-action-bar-icon
         icon="cart-o"
-        :badge="consultStore.consult.medicines?.length"
+        :color="cartLength > 0 ? '#323233' : '#eee'"
+        :badge="cartLength"
       />
       <div class="total-price">￥ {{ totalPrice }}</div>
       <van-action-bar-button type="primary" text="申请开方" />
