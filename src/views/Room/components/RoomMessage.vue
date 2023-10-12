@@ -4,7 +4,14 @@ import { MsgType, PrescriptionStatus } from '@/enums'
 import { useUserStore } from '@/stores'
 import type { Image } from '@/types/consult'
 import type { Message, Prescription } from '@/types/room'
-import { getConsultFlagText, getIllnessTimeText } from '@/utils/filter'
+import {
+  getConsultFlagText,
+  getIllnessTimeText,
+  getAllergicHistoryText,
+  getFertilityStatusText,
+  getLiverFunctionText,
+  getRenalFunctionText
+} from '@/utils/filter'
 import dayjs from 'dayjs'
 import { showImagePreview, showToast } from 'vant'
 import EvaluateCard from './EvaluateCard.vue'
@@ -54,10 +61,14 @@ const from = computed(() => route.query.from)
       </p>
       <p v-if="item.msg.consultRecord">
         <span v-if="from === 'medicine'">
-          肝功能 {{ item.msg.consultRecord.liverFunction }} | 肾功能
-          {{ item.msg.consultRecord.renalFunction }} | 过敏史
-          {{ item.msg.consultRecord.allergicHistory }} | 生育状态
-          {{ item.msg.consultRecord.fertilityStatus }}
+          肝功能
+          {{ getLiverFunctionText(item.msg.consultRecord.liverFunction) }} |
+          肾功能
+          {{ getRenalFunctionText(item.msg.consultRecord.renalFunction) }} |
+          过敏史
+          {{ getAllergicHistoryText(item.msg.consultRecord.allergicHistory) }} |
+          生育状态
+          {{ getFertilityStatusText(item.msg.consultRecord.fertilityStatus) }}
         </span>
         <span v-else>
           {{ getIllnessTimeText(item.msg.consultRecord?.illnessTime) }} |
