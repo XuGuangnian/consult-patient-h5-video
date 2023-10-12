@@ -9,6 +9,8 @@ import dayjs from 'dayjs'
 import { showImagePreview, showToast } from 'vant'
 import EvaluateCard from './EvaluateCard.vue'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 defineProps<{
   item: Message
@@ -37,6 +39,8 @@ const buy = (pre?: Prescription) => {
   }
   router.push(`/order/${pre.orderId}`)
 }
+const route = useRoute()
+const from = computed(() => route.query.from)
 </script>
 
 <template>
@@ -49,8 +53,16 @@ const buy = (pre?: Prescription) => {
         {{ item.msg.consultRecord?.patientInfo.age }}岁
       </p>
       <p v-if="item.msg.consultRecord">
-        {{ getIllnessTimeText(item.msg.consultRecord?.illnessTime) }} |
-        {{ getConsultFlagText(item.msg.consultRecord?.consultFlag) }}
+        <span v-if="from === 'medicine'">
+          肝功能 {{ item.msg.consultRecord.liverFunction }} | 肾功能
+          {{ item.msg.consultRecord.renalFunction }} | 过敏史
+          {{ item.msg.consultRecord.allergicHistory }} | 生育状态
+          {{ item.msg.consultRecord.fertilityStatus }}
+        </span>
+        <span v-else>
+          {{ getIllnessTimeText(item.msg.consultRecord?.illnessTime) }} |
+          {{ getConsultFlagText(item.msg.consultRecord?.consultFlag) }}
+        </span>
       </p>
     </div>
     <van-row>
@@ -62,6 +74,17 @@ const buy = (pre?: Prescription) => {
         @click="onPreviewImage(item.msg.consultRecord?.pictures)"
         >点击查看</van-col
       >
+      <van-col span="6" v-if="from === 'medicine'">用药需求</van-col>
+      <van-col span="18" v-if="from === 'medicine'">
+        {{
+          item.msg.consultRecord?.medicines
+            .map(
+              (item) => `${item.name}
+        ${item.specs} X${item.quantity}`
+            )
+            .join(',')
+        }}
+      </van-col>
     </van-row>
   </div>
   <!-- 通知-通用 -->
