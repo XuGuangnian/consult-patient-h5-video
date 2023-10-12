@@ -13,6 +13,10 @@ withDefaults(
   }
 )
 
+const emits = defineEmits<{
+  (e: 'addToCart'): void
+}>()
+
 const consultStore = useConsultStore()
 const selectedMedicines = computed(
   () =>
@@ -44,7 +48,7 @@ const onAskDocotor = () => {
 }
 
 const onAddToCart = () => {
-  console.log('加入药箱')
+  emits('addToCart')
 }
 </script>
 

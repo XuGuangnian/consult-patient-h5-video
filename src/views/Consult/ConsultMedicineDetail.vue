@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import MedicineAction from './components/MedicineAction.vue'
 import { getMedicineDetail } from '@/services/consult'
+import { useConsultStore } from '@/stores'
 import type { MedicineDetail } from '@/types/consult'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
@@ -16,6 +17,27 @@ onMounted(() => {
 const loadDetail = async () => {
   const { data } = await getMedicineDetail(id.value as string)
   detail.value = data
+}
+
+const consultStore = useConsultStore()
+const onAddToCart = () => {
+  const medicines = consultStore.consult.medicines || []
+  const medicine = medicines?.find((item) => item.id === detail.value?.id)
+  if (medicine) {
+    medicine.quantity += 1
+  } else {
+    medicines.push({
+      amount: detail.value?.amount!,
+      avatar: detail.value?.avatar!,
+      id: detail.value?.id!,
+      name: detail.value?.name!,
+      prescriptionFlag: detail.value?.prescriptionFlag!,
+      specs: detail.value?.specs!,
+      usageDosag: detail.value?.usageDosag!,
+      quantity: '1'
+    })
+  }
+  consultStore.setMedicines(medicines)
 }
 </script>
 
@@ -87,7 +109,7 @@ const loadDetail = async () => {
       </div>
     </div>
 
-    <medicine-action from="detail"></medicine-action>
+    <medicine-action from="detail" @add-to-cart="onAddToCart"></medicine-action>
   </div>
 </template>
 
