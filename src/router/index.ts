@@ -101,6 +101,11 @@ const router = createRouter({
       meta: { title: '选择药品' }
     },
     {
+      path: '/medicineDetail/:id',
+      component: () => import('@/views/Consult/ConsultMedicineDetail.vue'),
+      meta: { title: '药品详情' }
+    },
+    {
       path: '/',
       redirect: '/home',
       component: () => import('@/views/Layout/index.vue'),

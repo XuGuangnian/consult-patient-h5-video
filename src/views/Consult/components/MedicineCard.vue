@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useConsultStore } from '@/stores'
 import type { Medical } from '@/types/room'
-import { onMounted } from 'vue'
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   item: Medical
@@ -25,13 +25,6 @@ const onChange = (value: string, detail: { name: string }) => {
   consultStore.setMedicines(medicines)
 }
 
-onMounted(() => {
-  const medicines = consultStore.consult.medicines || []
-  const medicine = medicines.find((item) => item.id === props.item.id)
-  if (medicine) {
-    step.value = +medicine.quantity
-  }
-})
 watch(
   () =>
     consultStore.consult.medicines?.find((item) => item.id === props.item.id),
@@ -42,12 +35,18 @@ watch(
       step.value = 0
     }
   },
-  { deep: true }
+  { deep: true, immediate: true }
 )
+
+const router = useRouter()
+const onGoDetail = () => {
+  console.log('go detail')
+  router.push(`/medicineDetail/${props.item.id}`)
+}
 </script>
 
 <template>
-  <div class="item van-hairline--top">
+  <div class="item van-hairline--top" @click="onGoDetail">
     <img class="img" :src="item.avatar" alt="" />
     <div class="info">
       <p class="name">
@@ -59,6 +58,7 @@ watch(
             min="0"
             :class="{ hide: step === 0 }"
             @change="onChange"
+            @click.stop
           />
         </span>
       </p>
