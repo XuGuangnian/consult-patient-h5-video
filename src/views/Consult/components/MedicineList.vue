@@ -1,26 +1,27 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import MedicineCard from './MedicineCard.vue'
-const list = ref([])
+import type { MedicineList, MedicineParams } from '@/types/consult'
+import { getMedicinePage } from '@/services/consult'
+const list = ref<MedicineList>([])
 const loading = ref(false)
 const finished = ref(false)
 
-const onLoad = () => {
-  // 异步更新数据
-  // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-  setTimeout(() => {
-    for (let i = 0; i < 10; i++) {
-      list.value.push(list.value.length + 1)
-    }
+const params = ref<MedicineParams>({
+  keyword: '',
+  pageSize: 10,
+  current: 1
+})
 
-    // 加载状态结束
-    loading.value = false
-
-    // 数据全部加载完成
-    if (list.value.length >= 40) {
-      finished.value = true
-    }
-  }, 1000)
+const onLoad = async () => {
+  const { data } = await getMedicinePage(params.value)
+  list.value.push(...data.rows)
+  loading.value = false
+  if (params.value.current >= data.pageTotal) {
+    finished.value = true
+  } else {
+    params.value.current++
+  }
 }
 </script>
 
@@ -32,7 +33,7 @@ const onLoad = () => {
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <medicine-card v-for="i in list" :key="i"></medicine-card>
+      <medicine-card v-for="item in list" :key="item.id"></medicine-card>
     </van-list>
   </div>
 </template>

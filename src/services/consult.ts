@@ -9,6 +9,8 @@ import type {
   Image,
   KnowledgePage,
   KnowledgeParams,
+  MedicinePage,
+  MedicineParams,
   PageParams,
   PartialConsult,
   TopDep
@@ -20,6 +22,10 @@ export const getKnowledgePage = (params: KnowledgeParams) =>
 
 export const getDoctorPage = (params: PageParams) =>
   request<DoctorPage>('home/page/doc', 'GET', params)
+
+export const getMedicinePage = (params: MedicineParams) => {
+  return request<MedicinePage>('patient/medicine', 'GET', params)
+}
 
 export const followOrUnfollow = (id: string, type: FollowType = 'doc') =>
   request('like', 'POST', { id, type })

@@ -8,6 +8,7 @@ import type {
   RenalFunction
 } from '@/enums'
 import type { Patient } from './user'
+import type { Medical } from './room'
 
 // 文章信息类型
 export type Knowledge = {
@@ -40,16 +41,6 @@ export type Knowledge = {
   creatorId: string
 }
 
-// 文章列表
-export type KnowledgeList = Knowledge[]
-
-// 文章列表带分页
-export type KnowledgePage = {
-  pageTotal: number
-  total: number
-  rows: KnowledgeList
-}
-
 // props类型 recommend推荐，fatReduction减脂，food健康饮食，like关注医生页面文章
 export type KnowledgeType = 'like' | 'recommend' | 'fatReduction' | 'food'
 
@@ -61,6 +52,11 @@ export type PageParams = {
 // 文章列表查询参数
 export type KnowledgeParams = PageParams & {
   type: KnowledgeType
+}
+
+// 药品列表查询参数
+export type MedicineParams = PageParams & {
+  keyword: string
 }
 
 // 医生卡片对象
@@ -91,15 +87,28 @@ export type Doctor = {
   major: string
 }
 
+export type BasePage<T = any> = {
+  pageTotal: number
+  total: number
+  rows: T
+}
+
 // 医生列表
 export type DoctorList = Doctor[]
 
 // 医生分页
-export type DoctorPage = {
-  pageTotal: number
-  total: number
-  rows: DoctorList
-}
+export type DoctorPage = BasePage<DoctorList>
+
+// 文章列表
+export type KnowledgeList = Knowledge[]
+
+// 文章列表带分页
+export type KnowledgePage = BasePage<KnowledgeList>
+
+// 药品列表
+export type MedicineList = Medical[]
+// 药品列表带分页
+export type MedicinePage = BasePage<MedicineList>
 
 // 关注的目标类型：topic百科话题,knowledge百科文章,doc医生,disease疾病
 export type FollowType = 'topic' | 'knowledge' | 'doc' | 'disease'
