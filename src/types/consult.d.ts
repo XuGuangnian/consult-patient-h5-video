@@ -163,6 +163,7 @@ type PartialConsult = Partial<Consult>
 type SubDep = {
   id: string
   name: string
+  avatar?: string
 }
 // 一级科室
 type TopDep = SubDep & {
