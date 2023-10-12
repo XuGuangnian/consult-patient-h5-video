@@ -4,6 +4,7 @@ import type {
   MedicineIllness,
   PartialConsult
 } from '@/types/consult'
+import type { Medical } from '@/types/room'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -39,6 +40,8 @@ export const useConsultStore = defineStore(
       consult.value.pictures = illness.pictures
     }
 
+    const setMedicines = (val: Medical[]) => (consult.value.medicines = val)
+
     // 清理数据
     const clear = () => (consult.value = {})
     return {
@@ -50,6 +53,7 @@ export const useConsultStore = defineStore(
       setPatient,
       setCoupon,
       setMedicineIlness,
+      setMedicines,
       clear
     }
   },

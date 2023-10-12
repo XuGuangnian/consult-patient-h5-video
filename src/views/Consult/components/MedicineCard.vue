@@ -1,12 +1,37 @@
 <script setup lang="ts">
+import { useConsultStore } from '@/stores'
 import type { Medical } from '@/types/room'
+import { onMounted } from 'vue'
 import { ref } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   item: Medical
 }>()
 
 const step = ref(0)
+
+const consultStore = useConsultStore()
+const onChange = (value: string, detail: { name: string }) => {
+  const medicines = consultStore.consult.medicines || []
+  const medicine = medicines?.find((item) => item.id === detail.name)
+  if (medicine) {
+    medicine.quantity = value
+  } else {
+    medicines.push({
+      ...props.item,
+      quantity: value
+    })
+  }
+  consultStore.setMedicines(medicines)
+}
+
+onMounted(() => {
+  const medicines = consultStore.consult.medicines || []
+  const medicine = medicines.find((item) => item.id === props.item.id)
+  if (medicine) {
+    step.value = +medicine.quantity
+  }
+})
 </script>
 
 <template>
@@ -16,7 +41,13 @@ const step = ref(0)
       <p class="name">
         <span>{{ item.name }}</span>
         <span>
-          <van-stepper v-model="step" min="0" :class="{ hide: step === 0 }" />
+          <van-stepper
+            :name="item.id"
+            v-model="step"
+            min="0"
+            :class="{ hide: step === 0 }"
+            @change="onChange"
+          />
         </span>
       </p>
       <p class="size">

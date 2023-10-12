@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import MedicineList from './components/MedicineList.vue'
+import { useConsultStore } from '@/stores'
 
 const searchValue = ref('')
 const keyword = ref('')
@@ -10,6 +11,15 @@ const onSearch = () => {
 const onCancel = () => {
   keyword.value = ''
 }
+
+const consultStore = useConsultStore()
+const totalPrice = computed(() => {
+  return consultStore.consult.medicines
+    ?.reduce((sum, item) => {
+      return (sum += +item.amount * +item.quantity)
+    }, 0)
+    .toFixed(2)
+})
 </script>
 
 <template>
@@ -25,8 +35,11 @@ const onCancel = () => {
     <!-- 药品列表 -->
     <medicine-list :keyword="keyword"></medicine-list>
     <van-action-bar>
-      <van-action-bar-icon icon="cart-o" badge="0" />
-      <div class="total-price">￥ 1000</div>
+      <van-action-bar-icon
+        icon="cart-o"
+        :badge="consultStore.consult.medicines?.length"
+      />
+      <div class="total-price">￥ {{ totalPrice }}</div>
       <van-action-bar-button type="primary" text="申请开方" />
     </van-action-bar>
   </div>
