@@ -4,6 +4,15 @@ import { useConsultStore } from '@/stores'
 import { showToast } from 'vant'
 import { computed, ref } from 'vue'
 
+withDefaults(
+  defineProps<{
+    from?: 'list' | 'detail'
+  }>(),
+  {
+    from: 'list'
+  }
+)
+
 const consultStore = useConsultStore()
 const selectedMedicines = computed(
   () =>
@@ -29,6 +38,14 @@ const clear = () => {
   consultStore.setMedicines([])
   show.value = false
 }
+
+const onAskDocotor = () => {
+  console.log('申请开方')
+}
+
+const onAddToCart = () => {
+  console.log('加入药箱')
+}
 </script>
 
 <template>
@@ -41,7 +58,22 @@ const clear = () => {
       @click="openCart"
     />
     <div class="total-price">￥ {{ totalPrice }}</div>
-    <van-action-bar-button type="primary" text="申请开方" />
+    <!-- 
+      列表页 申请开放
+      详情页 加入药箱
+     -->
+    <van-action-bar-button
+      v-if="from === 'list'"
+      type="primary"
+      text="申请开方"
+      @click="onAskDocotor"
+    />
+    <van-action-bar-button
+      v-else
+      type="primary"
+      text="加入药箱"
+      @click="onAddToCart"
+    ></van-action-bar-button>
   </van-action-bar>
   <!-- 药品清单抽屉 -->
   <van-action-sheet v-model:show="show">
@@ -71,7 +103,11 @@ const clear = () => {
         :badge="cartLength"
       />
       <div class="total-price">￥ {{ totalPrice }}</div>
-      <van-action-bar-button type="primary" text="申请开方" />
+      <van-action-bar-button
+        type="primary"
+        text="申请开方"
+        @click="onAskDocotor"
+      />
     </van-action-bar>
   </van-action-sheet>
 </template>

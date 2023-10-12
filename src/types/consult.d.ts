@@ -244,25 +244,27 @@ export type ConsultOrderPage = {
   rows: ConsultOrderItem[]
 }
 
-export type MedicineDetail = {
-  id: string
-  name: string
-  amount: string
-  avatar: string
-  specs: string
-  usageDosag: string
-  prescriptionFlag: number
+export type MedicineDetail = Medical & {
+  /** 品牌 */
   brand: string
   brandId?: any
+  /** 生产企业 */
   manufacturer: string
+  /** 批准文号 */
   approvalNo: string
+  /** 有效期 */
   expiration: string
   classify: string
   classifyId: string
+  /** 功能主治 */
   indicationsFunction: string
+  /** 禁忌 */
   contraindication: string
+  /** 不良反应 */
   untowardReaction: string
+  /** 注意事项 */
   preparation: string
+  /** 执行标准 */
   standard: string
   creator: string
   updator: string
