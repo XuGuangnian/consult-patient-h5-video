@@ -1,24 +1,29 @@
 <script setup lang="ts">
+import type { Medical } from '@/types/room'
 import { ref } from 'vue'
+
+defineProps<{
+  item: Medical
+}>()
 
 const step = ref(0)
 </script>
 
 <template>
   <div class="item van-hairline--top">
-    <img class="img" src="@/assets/ad.png" alt="" />
+    <img class="img" :src="item.avatar" alt="" />
     <div class="info">
       <p class="name">
-        <span>优赛明 维生素E乳</span>
+        <span>{{ item.name }}</span>
         <span>
           <van-stepper v-model="step" min="0" :class="{ hide: step === 0 }" />
         </span>
       </p>
       <p class="size">
-        <van-tag>处方药</van-tag>
-        <span>80ml</span>
+        <van-tag v-if="item.prescriptionFlag === 1">处方药</van-tag>
+        <span>{{ item.specs }}</span>
       </p>
-      <p class="price">￥25.00</p>
+      <p class="price">￥{{ item.amount }}</p>
     </div>
   </div>
 </template>
