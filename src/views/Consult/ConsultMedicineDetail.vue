@@ -24,7 +24,7 @@ const onAddToCart = () => {
   const medicines = consultStore.consult.medicines || []
   const medicine = medicines?.find((item) => item.id === detail.value?.id)
   if (medicine) {
-    medicine.quantity += 1
+    medicine.quantity = String(+medicine.quantity + 1)
   } else {
     medicines.push({
       amount: detail.value?.amount!,

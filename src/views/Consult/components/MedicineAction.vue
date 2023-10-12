@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { createConsultOrder } from '@/services/consult'
 import MedicineCard from './MedicineCard.vue'
 import { useConsultStore } from '@/stores'
 import { showToast } from 'vant'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 withDefaults(
   defineProps<{
@@ -43,8 +45,11 @@ const clear = () => {
   show.value = false
 }
 
-const onAskDocotor = () => {
-  console.log('申请开方')
+const router = useRouter()
+const onAskDocotor = async () => {
+  const { data } = await createConsultOrder(consultStore.consult)
+  consultStore.clear()
+  router.push(`/room?orderId=${data.id}&from=medicine`)
 }
 
 const onAddToCart = () => {
