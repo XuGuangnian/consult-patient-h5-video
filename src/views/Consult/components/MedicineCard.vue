@@ -62,7 +62,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .item {
   display: flex;
-  flex-wrap: wrap;
   padding: 15px 0;
   .img {
     width: 80px;

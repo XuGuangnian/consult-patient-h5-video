@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import MedicineList from './components/MedicineList.vue'
+import MedicineCard from './components/MedicineCard.vue'
 import { useConsultStore } from '@/stores'
 import { showToast } from 'vant'
 
@@ -14,19 +15,18 @@ const onCancel = () => {
 }
 
 const consultStore = useConsultStore()
+const selectedMedicines = computed(
+  () =>
+    consultStore.consult.medicines?.filter((item) => +item.quantity > 0) || []
+)
 const totalPrice = computed(() => {
-  return consultStore.consult.medicines
-    ?.filter((item) => +item.quantity > 0)
+  return selectedMedicines.value
     ?.reduce((sum, item) => {
       return (sum += +item.amount * +item.quantity)
     }, 0)
     .toFixed(2)
 })
-const cartLength = computed(
-  () =>
-    consultStore.consult.medicines?.filter((item) => +item.quantity > 0)
-      .length || 0
-)
+const cartLength = computed(() => selectedMedicines.value.length || 0)
 
 const show = ref(false)
 const openCart = () => {
@@ -62,6 +62,7 @@ const clear = () => {
       <div class="total-price">￥ {{ totalPrice }}</div>
       <van-action-bar-button type="primary" text="申请开方" />
     </van-action-bar>
+    <!-- 药品清单抽屉 -->
     <van-action-sheet v-model:show="show">
       <div class="content">
         <div class="content-header">
@@ -72,6 +73,14 @@ const clear = () => {
             <van-icon name="delete-o" />
             <span>清空</span>
           </div>
+        </div>
+        <!-- 列表 -->
+        <div class="medicine-list">
+          <medicine-card
+            v-for="item in selectedMedicines"
+            :key="item.id"
+            :item="item"
+          ></medicine-card>
         </div>
       </div>
       <van-action-bar>
