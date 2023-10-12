@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import MedicineList from './components/MedicineList.vue'
 import { useConsultStore } from '@/stores'
+import { showToast } from 'vant'
 
 const searchValue = ref('')
 const keyword = ref('')
@@ -26,6 +27,17 @@ const cartLength = computed(
     consultStore.consult.medicines?.filter((item) => +item.quantity > 0)
       .length || 0
 )
+
+const show = ref(false)
+const openCart = () => {
+  if (cartLength.value === 0) return showToast('请选择药品')
+  show.value = true
+}
+
+const clear = () => {
+  // console.log('clear')
+  show.value = false
+}
 </script>
 
 <template>
@@ -45,10 +57,33 @@ const cartLength = computed(
         icon="cart-o"
         :color="cartLength > 0 ? '#323233' : '#eee'"
         :badge="cartLength"
+        @click="openCart"
       />
       <div class="total-price">￥ {{ totalPrice }}</div>
       <van-action-bar-button type="primary" text="申请开方" />
     </van-action-bar>
+    <van-action-sheet v-model:show="show">
+      <div class="content">
+        <div class="content-header">
+          <div class="content-header-left">
+            <span>药品清单</span><span>共{{ cartLength }}件商品</span>
+          </div>
+          <div class="content-header-right" @click="clear">
+            <van-icon name="delete-o" />
+            <span>清空</span>
+          </div>
+        </div>
+      </div>
+      <van-action-bar>
+        <van-action-bar-icon
+          icon="cart-o"
+          :color="cartLength > 0 ? '#323233' : '#eee'"
+          :badge="cartLength"
+        />
+        <div class="total-price">￥ {{ totalPrice }}</div>
+        <van-action-bar-button type="primary" text="申请开方" />
+      </van-action-bar>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -63,6 +98,31 @@ const cartLength = computed(
       line-height: 18px;
       font-weight: 700;
       color: #121826;
+    }
+  }
+  .content {
+    padding: 16px;
+    height: 400px;
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-left {
+        span {
+          font-size: 16px;
+          color: #000000;
+          margin-right: 10px;
+        }
+        span + span {
+          font-size: 13px;
+          color: var(--cp-primary);
+        }
+      }
+      &-right {
+        span {
+          margin-left: 5px;
+        }
+      }
     }
   }
 }
