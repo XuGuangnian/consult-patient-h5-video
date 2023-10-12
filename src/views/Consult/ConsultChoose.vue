@@ -36,6 +36,7 @@ const openCart = () => {
 
 const clear = () => {
   // console.log('clear')
+  consultStore.setMedicines([])
   show.value = false
 }
 </script>
@@ -99,6 +100,7 @@ const clear = () => {
 <style scoped lang="scss">
 .consult-choose-page {
   padding-top: 46px;
+
   .van-action-bar {
     border-top: 1px solid rgba(237, 237, 237, 0.9);
     .total-price {
@@ -110,12 +112,16 @@ const clear = () => {
     }
   }
   .content {
+    --content-height: 400px;
+    --content-header-height: 25px;
     padding: 16px;
-    height: 400px;
+    height: var(--content-height);
     .content-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      height: var(--content-header-height);
+      padding-bottom: 10px;
       &-left {
         span {
           font-size: 16px;
@@ -132,6 +138,9 @@ const clear = () => {
           margin-left: 5px;
         }
       }
+    }
+    .medicine-list {
+      padding-bottom: 45px;
     }
   }
 }

@@ -2,7 +2,7 @@
 import { useConsultStore } from '@/stores'
 import type { Medical } from '@/types/room'
 import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
   item: Medical
@@ -32,6 +32,18 @@ onMounted(() => {
     step.value = +medicine.quantity
   }
 })
+watch(
+  () =>
+    consultStore.consult.medicines?.find((item) => item.id === props.item.id),
+  (val) => {
+    if (val) {
+      step.value = +val.quantity
+    } else {
+      step.value = 0
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <template>
