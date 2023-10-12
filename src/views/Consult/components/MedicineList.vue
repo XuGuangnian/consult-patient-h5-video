@@ -3,6 +3,22 @@ import { ref } from 'vue'
 import MedicineCard from './MedicineCard.vue'
 import type { MedicineList, MedicineParams } from '@/types/consult'
 import { getMedicinePage } from '@/services/consult'
+import { watch } from 'vue'
+
+const props = defineProps<{
+  keyword: string
+}>()
+
+watch(
+  () => props.keyword,
+  (val) => {
+    params.value.current = 1
+    params.value.keyword = val
+    list.value = []
+    onLoad()
+  }
+)
+
 const list = ref<MedicineList>([])
 const loading = ref(false)
 const finished = ref(false)

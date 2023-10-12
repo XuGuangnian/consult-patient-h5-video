@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { showToast } from 'vant'
 import { ref } from 'vue'
 import MedicineList from './components/MedicineList.vue'
 
 const searchValue = ref('')
-const onSearch = (val: string) => showToast(val)
-const onCancel = () => showToast('取消')
+const keyword = ref('')
+const onSearch = () => {
+  keyword.value = searchValue.value
+}
+const onCancel = () => {
+  keyword.value = ''
+}
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const onCancel = () => showToast('取消')
       @cancel="onCancel"
     />
     <!-- 药品列表 -->
-    <medicine-list></medicine-list>
+    <medicine-list :keyword="keyword"></medicine-list>
     <van-action-bar>
       <van-action-bar-icon icon="cart-o" badge="0" />
       <div class="total-price">￥ 1000</div>
