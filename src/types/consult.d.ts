@@ -243,3 +243,31 @@ export type ConsultOrderPage = {
   pageTotal: number
   rows: ConsultOrderItem[]
 }
+
+export type MedicineDetail = {
+  id: string
+  name: string
+  amount: string
+  avatar: string
+  specs: string
+  usageDosag: string
+  prescriptionFlag: number
+  brand: string
+  brandId?: any
+  manufacturer: string
+  approvalNo: string
+  expiration: string
+  classify: string
+  classifyId: string
+  indicationsFunction: string
+  contraindication: string
+  untowardReaction: string
+  preparation: string
+  standard: string
+  creator: string
+  updator: string
+  createTime: string
+  updateTime: string
+  deleteState: number
+  mainPictures: string[]
+}

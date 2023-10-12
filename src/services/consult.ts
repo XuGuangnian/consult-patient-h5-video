@@ -9,6 +9,7 @@ import type {
   Image,
   KnowledgePage,
   KnowledgeParams,
+  MedicineDetail,
   MedicinePage,
   MedicineParams,
   PageParams,
@@ -72,3 +73,7 @@ export const cancelOrder = (id: string) =>
 
 export const deleteOrder = (id: string) =>
   request(`patient/order/${id}`, 'DELETE')
+
+export const getMedicineDetail = (id: string) => {
+  return request<MedicineDetail>(`patient/medicine/${id}`)
+}
