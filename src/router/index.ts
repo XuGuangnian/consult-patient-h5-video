@@ -106,6 +106,11 @@ const router = createRouter({
       meta: { title: '药品详情' }
     },
     {
+      path: '/consult/doctor',
+      component: () => import('@/views/Consult/ConsultDoctor.vue'),
+      meta: { title: '找医生' }
+    },
+    {
       path: '/',
       redirect: '/home',
       component: () => import('@/views/Layout/index.vue'),
