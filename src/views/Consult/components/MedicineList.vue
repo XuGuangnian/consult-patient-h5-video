@@ -12,9 +12,11 @@ const props = defineProps<{
 watch(
   () => props.keyword,
   (val) => {
-    params.value.current = 1
-    params.value.keyword = val
     list.value = []
+    loading.value = false
+    finished.value = false
+    params.value.keyword = val
+    params.value.current = 1
     onLoad()
   }
 )
