@@ -5,6 +5,8 @@ import type {
   IllnessTime,
   LiverFunction,
   OrderType,
+  PositionalTitles,
+  PriceRange,
   RenalFunction
 } from '@/enums'
 import type { Patient } from './user'
@@ -72,9 +74,18 @@ export type DoctorOrderType =
   | 'serviceFee_ascend'
 
 export type DoctorParams = PageParams & {
+  /** 省份id */
   provinceId: string
+  /** 科室id */
   depId: string
+  /** 排序 */
   order: DoctorOrderType
+  /** 医院等级 */
+  grade?: string
+  /** 职称 */
+  positionalTitles?: PositionalTitles
+  /** 价格范围 */
+  priceRange?: PriceRange
 }
 
 // 医生卡片对象

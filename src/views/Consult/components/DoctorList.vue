@@ -3,10 +3,14 @@ import { ref, watch } from 'vue'
 import DoctorCard from './DoctorCard.vue'
 import type { DoctorList, DoctorOrderType, DoctorParams } from '@/types/consult'
 import { getFindDoctorPage } from '@/services/consult'
+import type { PositionalTitles, PriceRange } from '@/enums'
 const props = defineProps<{
   depId: string
   order?: DoctorOrderType
   provinceId?: string
+  grade?: string
+  positionalTitles?: PositionalTitles
+  priceRange?: PriceRange
 }>()
 const list = ref<DoctorList>([])
 const loading = ref(false)
@@ -31,16 +35,28 @@ const onLoad = async () => {
   }
 }
 
-watch([() => props.order, () => props.provinceId], ([order, provinceId]) => {
-  // console.log(val)
-  list.value = []
-  loading.value = false
-  finished.value = false
-  params.value.order = order || 'default_ascend'
-  params.value.provinceId = provinceId || '100000'
-  params.value.current = 1
-  // onLoad()
-})
+watch(
+  [
+    () => props.order,
+    () => props.provinceId,
+    () => props.grade,
+    () => props.positionalTitles,
+    () => props.priceRange
+  ],
+  ([order, provinceId, grade, positionalTitles, priceRange]) => {
+    // console.log(val)
+    list.value = []
+    loading.value = false
+    finished.value = false
+    params.value.order = order || 'default_ascend'
+    params.value.provinceId = provinceId || '100000'
+    params.value.grade = grade
+    params.value.positionalTitles = positionalTitles
+    params.value.priceRange = priceRange
+    params.value.current = 1
+    // onLoad()
+  }
+)
 </script>
 
 <template>

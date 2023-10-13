@@ -25,7 +25,14 @@ const options = [
   { text: '咨询量', value: 'consultationNum_ascend' },
   { text: '价格', value: 'serviceFee_ascend' }
 ]
+
+const grade = ref<string>()
+const positionalTitles = ref<PositionalTitles>()
+const priceRange = ref<PriceRange>()
 const onConfirm = () => {
+  grade.value = form.value.grade
+  positionalTitles.value = form.value.positionalTitles
+  priceRange.value = form.value.priceRange
   itemRef.value?.toggle()
   // 或者
   // menuRef.value.close()
@@ -151,6 +158,9 @@ const form = ref<FindDoctorForm>({ ...initForm })
       :dep-id="depId"
       :order="order"
       :province-id="provinceId"
+      :grade="grade"
+      :positional-titles="positionalTitles"
+      :price-range="priceRange"
     ></doctor-list>
   </div>
 </template>
