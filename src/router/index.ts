@@ -111,7 +111,7 @@ const router = createRouter({
       meta: { title: '找医生' }
     },
     {
-      path: '/doctorList/:deptId',
+      path: '/doctorList/:depId',
       component: () => import('@/views/Consult/ConsultDoctorList.vue'),
       meta: { title: '医生搜索' }
     },

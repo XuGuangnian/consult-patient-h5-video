@@ -5,6 +5,7 @@ import type { TopDep } from '@/types/consult'
 import { onMounted } from 'vue'
 import { getAllDep } from '@/services/consult'
 import { computed } from 'vue'
+import DoctorList from './components/DoctorList.vue'
 
 const depts = ref<TopDep[]>([])
 const loadDepts = async () => {
@@ -54,7 +55,7 @@ const allDepts = computed(() =>
 
       <van-tabs shrink sticky>
         <van-tab :title="item.name" v-for="item in allDepts" :key="item.id">
-          {{ item.name }} 医生列表
+          <doctor-list :dep-id="item.id"></doctor-list>
         </van-tab>
       </van-tabs>
     </div>
