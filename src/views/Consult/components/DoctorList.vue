@@ -14,7 +14,7 @@ const finished = ref(false)
 const params = ref<DoctorParams>({
   current: 1,
   pageSize: 10,
-  provinceId: '0',
+  provinceId: '100000',
   depId: props.depId,
   order: props.order || 'default_ascend'
 })

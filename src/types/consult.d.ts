@@ -292,3 +292,16 @@ export type MedicineDetail = Medical & {
   deleteState: number
   mainPictures: string[]
 }
+
+export type Area = {
+  id: string
+  parentId: string
+  name: string
+  citys?: City[]
+}
+
+export type City = {
+  id: string
+  parentId: string
+  name: string
+}

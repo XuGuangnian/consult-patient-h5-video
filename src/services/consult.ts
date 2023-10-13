@@ -1,4 +1,5 @@
 import type {
+  Area,
   ConsultOrderItem,
   ConsultOrderListParams,
   ConsultOrderPage,
@@ -81,4 +82,8 @@ export const deleteOrder = (id: string) =>
 
 export const getMedicineDetail = (id: string) => {
   return request<MedicineDetail>(`patient/medicine/${id}`)
+}
+
+export const getAllBasicArea = () => {
+  return request<Area[]>('basicArea/all?level=2')
 }

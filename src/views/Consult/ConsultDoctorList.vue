@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DoctorList from './components/DoctorList.vue'
-import type { DoctorOrderType } from '@/types/consult'
+import type { Area, DoctorOrderType } from '@/types/consult'
+import { onMounted } from 'vue'
+import { getAllBasicArea } from '@/services/consult'
 
 const route = useRoute()
 const department = (route.query.department || '找医生') as string
@@ -22,7 +24,37 @@ const options = [
 const onConfirm = () => {
   itemRef.value?.toggle()
   // 或者
-  // menuRef.value.close();
+  // menuRef.value.close()
+}
+
+// const provinceId = ref(0)
+const active = ref(0)
+const areas = ref<Area[]>([])
+onMounted(async () => {
+  const { data } = await getAllBasicArea()
+  areas.value = [
+    {
+      id: '100000',
+      parentId: '',
+      name: '全部'
+    },
+    ...data
+  ]
+})
+const citys = computed(() => {
+  const parent = areas.value[active.value]
+  const result = parent?.citys || []
+  return [
+    {
+      id: parent.id,
+      parentId: parent.parentId,
+      name: '全部'
+    },
+    ...result
+  ]
+})
+const selectCity = (id: string) => {
+  console.log(id)
 }
 </script>
 
@@ -33,7 +65,26 @@ const onConfirm = () => {
       <cp-icon name="home-search" /> 搜一搜：医生/疾病名称
     </div>
     <van-dropdown-menu ref="menuRef">
-      <van-dropdown-item title="区域"> 内容 </van-dropdown-item>
+      <van-dropdown-item title="区域">
+        <div class="wrapper">
+          <van-sidebar v-model="active">
+            <van-sidebar-item
+              :title="item.name"
+              v-for="item in areas"
+              :key="item.id"
+            />
+          </van-sidebar>
+          <div class="sub">
+            <span
+              v-for="city in citys"
+              :key="city.id"
+              @click="selectCity(city.id)"
+            >
+              {{ city.name }}
+            </span>
+          </div>
+        </div>
+      </van-dropdown-item>
       <van-dropdown-item v-model="order" :options="options" />
       <van-dropdown-item title="筛选" ref="itemRef">
         <van-cell center title="包邮">
@@ -85,6 +136,38 @@ const onConfirm = () => {
     top: 40px;
     z-index: 10;
     background-color: #fff;
+  }
+
+  .van-sidebar {
+    width: 114px;
+    &-item {
+      padding: 14px;
+      color: var(--cp-tag);
+      &--select {
+        color: var(--cp-main);
+        font-weight: normal;
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .wrapper {
+    // height: calc(100vh - 46px);
+    height: 400px;
+    overflow: hidden;
+    display: flex;
+    .sub {
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+      > span {
+        display: block;
+        padding: 14px 30px;
+        color: var(--cp-dark);
+      }
+    }
   }
 }
 </style>
