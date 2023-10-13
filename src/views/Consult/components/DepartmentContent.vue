@@ -38,21 +38,20 @@ const show = ref(false)
   </div>
   <van-action-sheet v-model:show="show" title="全部科室">
     <div class="content">
-      <div>
-        <p class="department-header">内科</p>
-        <div class="mb-20">
-          <span class="department-text">心血管内科</span
-          ><span class="department-text">普通内科</span
-          ><span class="department-text">神经内科</span
-          ><span class="department-text">消化内科</span
-          ><span class="department-text">内分泌科</span
-          ><span class="department-text">免疫科</span
-          ><span class="department-text">高压氧科</span
-          ><span class="department-text">血液科</span
-          ><span class="department-text">肾病内科</span
-          ><span class="department-text">呼吸科</span
-          ><span class="department-text">感染内科</span
-          ><span class="department-text">过敏反应科</span>
+      <div v-for="item in depts" :key="item.id">
+        <div v-if="item.child.length > 0">
+          <p class="department-header">{{ item.name }}</p>
+          <div class="mb-20">
+            <span
+              @click="
+                $router.push(`/doctorList/${sub?.id}?department=${sub?.name}`)
+              "
+              class="department-text"
+              v-for="sub in item.child"
+              :key="sub.id"
+              >{{ sub.name }}</span
+            >
+          </div>
         </div>
       </div>
     </div>
