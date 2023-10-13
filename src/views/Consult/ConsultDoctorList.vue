@@ -5,6 +5,12 @@ import DoctorList from './components/DoctorList.vue'
 import type { Area, DoctorOrderType } from '@/types/consult'
 import { onMounted } from 'vue'
 import { getAllBasicArea } from '@/services/consult'
+import {
+  gradeOptions,
+  positionalTitlesOptions,
+  priceRangeOptions
+} from '@/services/constants'
+import type { PositionalTitles, PriceRange } from '@/enums'
 
 const route = useRoute()
 const department = (route.query.department || '找医生') as string
@@ -12,8 +18,6 @@ const depId = route.params.depId as string
 
 const menuRef = ref(null)
 const itemRef = ref()
-const switch1 = ref(false)
-const switch2 = ref(false)
 const order = ref<DoctorOrderType>('default_ascend')
 const options = [
   { text: '综合排序', value: 'default_ascend' },
@@ -25,6 +29,11 @@ const onConfirm = () => {
   itemRef.value?.toggle()
   // 或者
   // menuRef.value.close()
+}
+
+const onReset = () => {
+  // console.log('onReset')
+  form.value = { ...initForm }
 }
 
 const provinceId = ref('100000')
@@ -57,6 +66,20 @@ const selectCity = (id: string) => {
   // console.log(id)
   provinceId.value = id
 }
+
+type FindDoctorForm = {
+  grade?: string
+  positionalTitles?: PositionalTitles
+  priceRange?: PriceRange
+}
+
+const initForm: FindDoctorForm = {
+  grade: undefined,
+  positionalTitles: undefined,
+  priceRange: undefined
+}
+
+const form = ref<FindDoctorForm>({ ...initForm })
 </script>
 
 <template>
@@ -89,20 +112,36 @@ const selectCity = (id: string) => {
       </van-dropdown-item>
       <van-dropdown-item v-model="order" :options="options" />
       <van-dropdown-item title="筛选" ref="itemRef">
-        <van-cell center title="包邮">
-          <template #right-icon>
-            <van-switch v-model="switch1" />
-          </template>
-        </van-cell>
-        <van-cell center title="团购">
-          <template #right-icon>
-            <van-switch v-model="switch2" />
-          </template>
-        </van-cell>
-        <div style="padding: 5px 16px">
-          <van-button type="primary" block round @click="onConfirm">
-            确认
-          </van-button>
+        <div class="find-doctor-form">
+          <div class="item">
+            <p>医院等级</p>
+            <cp-radio-btn
+              :options="gradeOptions"
+              v-model="form.grade"
+            ></cp-radio-btn>
+          </div>
+          <div class="item">
+            <p>医生职称</p>
+            <cp-radio-btn
+              :options="positionalTitlesOptions"
+              v-model="form.positionalTitles"
+            ></cp-radio-btn>
+          </div>
+          <div class="item">
+            <p>价格区间</p>
+            <cp-radio-btn
+              :options="priceRangeOptions"
+              v-model="form.priceRange"
+            ></cp-radio-btn>
+          </div>
+          <van-button round @click="onReset" class="reset-btn">重置</van-button>
+          <van-button
+            round
+            type="primary"
+            @click="onConfirm"
+            class="confirm-btn"
+            >确认</van-button
+          >
         </div>
       </van-dropdown-item>
     </van-dropdown-menu>
@@ -174,6 +213,28 @@ const selectCity = (id: string) => {
         padding: 14px 30px;
         color: var(--cp-dark);
       }
+    }
+  }
+
+  .find-doctor-form {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    .item {
+      padding: 15px 0;
+      p {
+        font-size: 14px;
+        font-family: PingFang SC, PingFang SC-Regular;
+        font-weight: 400;
+        color: #848484;
+        margin-bottom: 10px;
+      }
+    }
+    .reset-btn {
+      width: 125px;
+      margin-right: 15px;
+    }
+    .confirm-btn {
+      width: 205px;
     }
   }
 }
