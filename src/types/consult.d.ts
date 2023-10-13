@@ -72,7 +72,7 @@ export type DoctorOrderType =
   | 'serviceFee_ascend'
 
 export type DoctorParams = PageParams & {
-  // provinceId: string
+  provinceId: string
   depId: string
   order: DoctorOrderType
 }
