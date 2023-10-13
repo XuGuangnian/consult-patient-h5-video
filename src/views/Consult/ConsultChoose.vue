@@ -33,5 +33,11 @@ const onCancel = () => {
 <style scoped lang="scss">
 .consult-choose-page {
   padding-top: 46px;
+  .van-search {
+    position: sticky;
+    top: 46px;
+    z-index: 10;
+    background-color: #fff;
+  }
 }
 </style>

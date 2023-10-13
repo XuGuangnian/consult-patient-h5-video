@@ -138,6 +138,10 @@ const onAddToCart = () => {
   padding: 16px;
   height: var(--content-height);
   .content-header {
+    position: sticky;
+    top: 0px;
+    z-index: 10;
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
