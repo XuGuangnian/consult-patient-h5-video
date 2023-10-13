@@ -85,5 +85,5 @@ export const getMedicineDetail = (id: string) => {
 }
 
 export const getAllBasicArea = () => {
-  return request<Area[]>('basicArea/all?level=2')
+  return request<Area[]>('basicArea/all')
 }
