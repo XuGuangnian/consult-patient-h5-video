@@ -179,8 +179,10 @@ export type Consult = {
   allergicHistory: AllergicHistory
   /** 生育状态及计划 */
   fertilityStatus: FertilityStatus
-  // 开药问诊-开药问诊的药品id集合
+  /** 药品 */
   medicines: Medical[]
+  /** 医生Id */
+  docId: string
 }
 
 // Partial<T> 把一个对象的属性转换成可选

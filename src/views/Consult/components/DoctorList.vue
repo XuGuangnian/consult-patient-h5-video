@@ -31,6 +31,7 @@ const onLoad = async () => {
   if (params.value.current >= data.pageTotal) {
     finished.value = true
   } else {
+    finished.value = false
     params.value.current++
   }
 }
@@ -44,17 +45,14 @@ watch(
     () => props.priceRange
   ],
   ([order, provinceId, grade, positionalTitles, priceRange]) => {
-    // console.log(val)
     list.value = []
-    loading.value = false
-    finished.value = false
     params.value.order = order || 'default_ascend'
     params.value.provinceId = provinceId || '100000'
     params.value.grade = grade
     params.value.positionalTitles = positionalTitles
     params.value.priceRange = priceRange
     params.value.current = 1
-    // onLoad()
+    onLoad()
   }
 )
 </script>

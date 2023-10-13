@@ -9,18 +9,6 @@ const props = defineProps<{
   keyword: string
 }>()
 
-watch(
-  () => props.keyword,
-  (val) => {
-    list.value = []
-    loading.value = false
-    finished.value = false
-    params.value.keyword = val
-    params.value.current = 1
-    onLoad()
-  }
-)
-
 const list = ref<MedicineList>([])
 const loading = ref(false)
 const finished = ref(false)
@@ -38,9 +26,20 @@ const onLoad = async () => {
   if (params.value.current >= data.pageTotal) {
     finished.value = true
   } else {
+    finished.value = false
     params.value.current++
   }
 }
+
+watch(
+  () => props.keyword,
+  (val) => {
+    list.value = []
+    params.value.keyword = val
+    params.value.current = 1
+    onLoad()
+  }
+)
 </script>
 
 <template>
