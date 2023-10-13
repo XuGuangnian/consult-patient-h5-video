@@ -27,7 +27,7 @@ const onConfirm = () => {
   // menuRef.value.close()
 }
 
-// const provinceId = ref(0)
+const provinceId = ref('100000')
 const active = ref(0)
 const areas = ref<Area[]>([])
 onMounted(async () => {
@@ -54,7 +54,8 @@ const citys = computed(() => {
   ]
 })
 const selectCity = (id: string) => {
-  console.log(id)
+  // console.log(id)
+  provinceId.value = id
 }
 </script>
 
@@ -80,7 +81,8 @@ const selectCity = (id: string) => {
               :key="city.id"
               @click="selectCity(city.id)"
             >
-              {{ city.name }}
+              <span>{{ city.name }}</span>
+              <van-icon name="success" v-if="city.id === provinceId" />
             </span>
           </div>
         </div>
@@ -106,7 +108,11 @@ const selectCity = (id: string) => {
     </van-dropdown-menu>
 
     <!-- 医生列表组件 -->
-    <doctor-list :dep-id="depId" :order="order"></doctor-list>
+    <doctor-list
+      :dep-id="depId"
+      :order="order"
+      :province-id="provinceId"
+    ></doctor-list>
   </div>
 </template>
 
@@ -163,7 +169,8 @@ const selectCity = (id: string) => {
       height: 100%;
       overflow-y: auto;
       > span {
-        display: block;
+        display: flex;
+        justify-content: space-between;
         padding: 14px 30px;
         color: var(--cp-dark);
       }

@@ -6,6 +6,7 @@ import { getFindDoctorPage } from '@/services/consult'
 const props = defineProps<{
   depId: string
   order?: DoctorOrderType
+  provinceId?: string
 }>()
 const list = ref<DoctorList>([])
 const loading = ref(false)
@@ -14,9 +15,9 @@ const finished = ref(false)
 const params = ref<DoctorParams>({
   current: 1,
   pageSize: 10,
-  provinceId: '100000',
   depId: props.depId,
-  order: props.order || 'default_ascend'
+  order: props.order || 'default_ascend',
+  provinceId: props.provinceId || '100000'
 })
 
 const onLoad = async () => {
@@ -30,18 +31,16 @@ const onLoad = async () => {
   }
 }
 
-watch(
-  () => props.order,
-  (val) => {
-    // console.log(val)
-    list.value = []
-    loading.value = false
-    finished.value = false
-    params.value.order = val || 'default_ascend'
-    params.value.current = 1
-    // onLoad()
-  }
-)
+watch([() => props.order, () => props.provinceId], ([order, provinceId]) => {
+  // console.log(val)
+  list.value = []
+  loading.value = false
+  finished.value = false
+  params.value.order = order || 'default_ascend'
+  params.value.provinceId = provinceId || '100000'
+  params.value.current = 1
+  // onLoad()
+})
 </script>
 
 <template>
