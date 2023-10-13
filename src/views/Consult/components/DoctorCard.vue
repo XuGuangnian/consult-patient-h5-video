@@ -1,29 +1,35 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Doctor } from '@/types/consult'
+
+defineProps<{
+  item: Doctor
+}>()
+</script>
 
 <template>
   <div class="doctor-card">
-    <img
-      src="https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/consult/deafaultAvatar.jpg"
-      class="avator"
-      alt=""
-    />
+    <img :src="item.avatar" class="avator" alt="" />
     <div class="detail">
       <p>
-        <span class="doctor-name">张医生</span
-        ><span class="doctor-other-info">消化内科 | 主治医师</span>
+        <span class="doctor-name">{{ item.name }}</span
+        ><span class="doctor-other-info"
+          >{{ item.depName }} | {{ item.positionalTitles }}</span
+        >
       </p>
       <p class="hospital-info">
-        <span class="hospital-grade">三级甲等</span
-        ><span class="hospital-name">中国医学科学院北京协和医院</span>
+        <span class="hospital-grade">{{ item.gradeName }}</span
+        ><span class="hospital-name">{{ item.hospitalName }}</span>
       </p>
-      <p class="skill-list">高血压，心脏病</p>
+      <p class="skill-list">{{ item.major }}</p>
       <p class="record-list">
         <van-icon name="star" color="#fea116" />
-        <span class="score">5.0</span><span> / 接诊数 </span
-        ><span class="count">0</span>
+        <span class="score">{{ item.score }}</span
+        ><span> / 接诊数 </span
+        ><span class="count">{{ item.consultationNum }}</span>
       </p>
       <p class="bottom-content">
-        <span class="price">¥49</span><span class="btn">问医生</span>
+        <span class="price">¥{{ item.serviceFee }}</span
+        ><span class="btn">问医生</span>
       </p>
     </div>
   </div>

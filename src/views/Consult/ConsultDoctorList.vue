@@ -13,7 +13,7 @@ const value = ref(0)
 const switch1 = ref(false)
 const switch2 = ref(false)
 const options = [
-  { text: '全部商品', value: 0 },
+  { text: '综合排序', value: 0 },
   { text: '新款商品', value: 1 },
   { text: '活动商品', value: 2 }
 ]
@@ -31,6 +31,7 @@ const onConfirm = () => {
       <cp-icon name="home-search" /> 搜一搜：医生/疾病名称
     </div>
     <van-dropdown-menu ref="menuRef">
+      <van-dropdown-item title="区域"> 内容 </van-dropdown-item>
       <van-dropdown-item v-model="value" :options="options" />
       <van-dropdown-item title="筛选" ref="itemRef">
         <van-cell center title="包邮">
