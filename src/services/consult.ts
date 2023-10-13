@@ -5,6 +5,7 @@ import type {
   ConsultOrderPreData,
   ConsultOrderPreParams,
   DoctorPage,
+  DoctorParams,
   FollowType,
   Image,
   KnowledgePage,
@@ -23,6 +24,10 @@ export const getKnowledgePage = (params: KnowledgeParams) =>
 
 export const getDoctorPage = (params: PageParams) =>
   request<DoctorPage>('home/page/doc', 'GET', params)
+
+export const getFindDoctorPage = (params: DoctorParams) => {
+  return request<DoctorPage>('/patient/search/doc', 'GET', params)
+}
 
 export const getMedicinePage = (params: MedicineParams) => {
   return request<MedicinePage>('patient/medicine', 'GET', params)

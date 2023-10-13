@@ -59,6 +59,24 @@ export type MedicineParams = PageParams & {
   keyword: string
 }
 
+/**
+ * default_ascend 综合排序
+ * score_ascend 评分
+ * consultationNum_ascend 咨询量
+ * serviceFee_ascend 价格
+ */
+export type DoctorOrderType =
+  | 'default_ascend'
+  | 'score_ascend'
+  | 'consultationNum_ascend'
+  | 'serviceFee_ascend'
+
+export type DoctorParams = PageParams & {
+  // provinceId: string
+  depId: string
+  order: DoctorOrderType
+}
+
 // 医生卡片对象
 export type Doctor = {
   /** 医生ID */
