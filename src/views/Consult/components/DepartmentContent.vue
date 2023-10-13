@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TopDep } from '@/types/consult'
+import { ref } from 'vue'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -7,19 +8,27 @@ const props = defineProps<{
 }>()
 
 const showDepts = computed(() => props.depts[0]?.child || [])
+const show = ref(false)
 </script>
 
 <template>
   <div class="department-content">
     <div class="department-header">
       <p class="title-text">按科室找医生</p>
-      <p class="all-link">
+      <p class="all-link" @click="show = true">
         全部科室
         <van-icon name="arrow" />
       </p>
     </div>
     <div class="department-list">
-      <div class="department-item" v-for="item in showDepts" :key="item.id">
+      <div
+        class="department-item"
+        @click="
+          $router.push(`/doctorList/${item?.id}?department=${item?.name}`)
+        "
+        v-for="item in showDepts"
+        :key="item.id"
+      >
         <img :src="item.avatar" alt="" class="department-icon" /><span
           class="department-name"
           >{{ item.name }}</span
@@ -27,6 +36,27 @@ const showDepts = computed(() => props.depts[0]?.child || [])
       </div>
     </div>
   </div>
+  <van-action-sheet v-model:show="show" title="全部科室">
+    <div class="content">
+      <div>
+        <p class="department-header">内科</p>
+        <div class="mb-20">
+          <span class="department-text">心血管内科</span
+          ><span class="department-text">普通内科</span
+          ><span class="department-text">神经内科</span
+          ><span class="department-text">消化内科</span
+          ><span class="department-text">内分泌科</span
+          ><span class="department-text">免疫科</span
+          ><span class="department-text">高压氧科</span
+          ><span class="department-text">血液科</span
+          ><span class="department-text">肾病内科</span
+          ><span class="department-text">呼吸科</span
+          ><span class="department-text">感染内科</span
+          ><span class="department-text">过敏反应科</span>
+        </div>
+      </div>
+    </div>
+  </van-action-sheet>
 </template>
 
 <style scoped lang="scss">
@@ -72,6 +102,36 @@ const showDepts = computed(() => props.depts[0]?.child || [])
         font-weight: 500;
         color: #121826;
       }
+    }
+  }
+}
+
+.content {
+  padding: 16px;
+  height: 400px;
+  .department-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #121826;
+  }
+  .mb-20 {
+    margin-bottom: 20px;
+    .department-text {
+      display: inline-block;
+      height: 33px;
+      padding: 0 20px;
+      background: #fafafa;
+      border-radius: 27px;
+      font-size: 13px;
+      color: #3c3e42;
+      line-height: 33px;
+      text-align: center;
+      margin-right: 9px;
+      margin-bottom: 9px;
     }
   }
 }
