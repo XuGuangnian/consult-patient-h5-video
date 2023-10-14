@@ -29,7 +29,7 @@ const askDoctor = () => {
 
 <template>
   <div class="doctor-detail-page" v-if="doctor">
-    <cp-nav-bar title="医生详情"></cp-nav-bar>
+    <cp-nav-bar></cp-nav-bar>
     <div class="basic-info-bg">
       <div class="basic-info-content">
         <p class="avator-line">
@@ -111,6 +111,9 @@ const askDoctor = () => {
 
 <style scoped lang="scss">
 .doctor-detail-page {
+  .van-nav-bar {
+    background: #dff4f1;
+  }
   padding-top: 46px;
   .basic-info-bg {
     background: linear-gradient(180deg, #dff4f1 0%, rgba(44, 181, 165, 0) 100%);
@@ -323,6 +326,9 @@ const askDoctor = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .van-button {
+      height: 44px;
+    }
   }
 }
 </style>
