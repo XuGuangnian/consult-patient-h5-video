@@ -6,6 +6,8 @@ import { onMounted } from 'vue'
 import { getAllDep } from '@/services/consult'
 import { computed } from 'vue'
 import DoctorList from './components/DoctorList.vue'
+import { useConsultStore } from '@/stores'
+import { ConsultType } from '@/enums'
 
 const depts = ref<TopDep[]>([])
 const loadDepts = async () => {
@@ -18,6 +20,7 @@ onMounted(() => {
 const allDepts = computed(() =>
   depts.value.map((item) => item?.child || []).flat()
 )
+const consultStore = useConsultStore()
 </script>
 
 <template>
@@ -39,7 +42,12 @@ const allDepts = computed(() =>
           <p class="tips">2w+名医在线问诊</p>
         </div>
       </div>
-      <span class="inquary-btn" @click="$router.push('/consult/fast')"
+      <span
+        class="inquary-btn"
+        @click="
+          consultStore.setType(ConsultType.Fast) &&
+            $router.push('/consult/fast')
+        "
         >去咨询</span
       >
     </div>
