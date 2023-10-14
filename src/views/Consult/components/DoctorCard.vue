@@ -22,7 +22,7 @@ const askDoctor = () => {
 </script>
 
 <template>
-  <div class="doctor-card">
+  <div class="doctor-card" @click="$router.push(`/doctorDetail/${item.id}`)">
     <img :src="item.avatar" class="avator" alt="" />
     <div class="detail">
       <p>
@@ -44,7 +44,7 @@ const askDoctor = () => {
       </p>
       <p class="bottom-content">
         <span class="price">¥{{ item.serviceFee }}</span
-        ><span class="btn" @click="askDoctor">问医生</span>
+        ><span class="btn" @click.stop="askDoctor">问医生</span>
       </p>
     </div>
   </div>
