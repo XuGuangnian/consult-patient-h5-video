@@ -1,29 +1,47 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getDoctorDetail } from '@/services/consult'
+import type { Doctor } from '@/types/consult'
+import { onMounted } from 'vue'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const doctorId = route.params.id as string
+const doctor = ref<Doctor>()
+const loadData = async () => {
+  const { data } = await getDoctorDetail(doctorId)
+  doctor.value = data
+}
+onMounted(() => {
+  loadData()
+})
+</script>
 
 <template>
-  <div class="doctor-detail-page">
+  <div class="doctor-detail-page" v-if="doctor">
     <cp-nav-bar title="医生详情"></cp-nav-bar>
     <div class="basic-info-bg">
       <div class="basic-info-content">
         <p class="avator-line">
-          <img
-            alt=""
-            class="doctor-avator"
-            src="https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/consult/deafaultAvatar.jpg"
-          /><span class="follow-btn">+ 关注</span>
+          <img alt="" class="doctor-avator" :src="doctor.avatar" /><span
+            class="follow-btn"
+          >
+            {{ doctor.likeFlag === 1 ? '已关注' : '+ 关注' }}
+          </span>
         </p>
         <p class="doctor-line">
-          <span class="doctor-name">张医生</span
-          ><span class="dep-info">心血管内科 | </span
-          ><span class="dep-info">副主任医师</span>
+          <span class="doctor-name">{{ doctor.name }}</span
+          ><span class="dep-info">{{ doctor.depName }} | </span
+          ><span class="dep-info">{{ doctor.positionalTitles }}</span>
         </p>
         <p class="hospital-line">
-          <span class="grade-name">三级甲等</span
-          ><span class="hospital-name">中国医学科学院阜外医院</span>
+          <span class="grade-name">{{ doctor.gradeName }}</span
+          ><span class="hospital-name">{{ doctor.hospitalName }}</span>
         </p>
         <p class="record-list">
-          <img src="" alt="" /><span class="score">4.8</span
-          ><span> / 接诊数 </span><span class="score">2306</span>
+          <img src="" alt="" /><span class="score">{{ doctor.score }}</span
+          ><span> / 接诊数 </span
+          ><span class="score">{{ doctor.consultationNum }}</span>
         </p>
       </div>
     </div>
@@ -31,7 +49,7 @@
       <p class="intro-title">个人简介</p>
       <p class="intro-pre-title">擅长领域</p>
       <div class="adm-ellipsis intro-desc">
-        专于冠心病诊断和介入治疗工作。主要从事左主干病变、分叉病变、慢性闭塞病变等复杂冠脉病变的介入治疗。
+        {{ doctor.major }}
       </div>
     </div>
 
@@ -41,7 +59,7 @@
         <div>
           <p>
             <span class="inquire-type">图文问诊</span
-            ><span class="price">¥100/次</span>
+            ><span class="price">¥{{ doctor.serviceFee }}/次</span>
           </p>
           <p class="tips">最长24小时图文多次沟通</p>
         </div>
@@ -56,7 +74,8 @@
           <!-- <span class="evaluate-total">(0)</span> -->
         </p>
         <p>
-          <span class="rate-title">评分</span><span class="rate-text">4.8</span>
+          <span class="rate-title">评分</span
+          ><span class="rate-text">{{ doctor.score }}</span>
         </p>
       </div>
       <!-- <div class="no-evaluate">暂无</div> -->

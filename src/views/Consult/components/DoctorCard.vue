@@ -11,18 +11,26 @@ const props = defineProps<{
 const router = useRouter()
 const consultStore = useConsultStore()
 const askDoctor = () => {
-  consultStore.setDocId(props.item.id)
   if (props.grade === '9') {
     consultStore.setIllnessType(1)
   } else {
     consultStore.setIllnessType(0)
   }
+  consultStore.setDocId(props.item.id)
   router.push(`/consult/illness`)
+}
+const goDoctorDetail = () => {
+  if (props.grade === '9') {
+    consultStore.setIllnessType(1)
+  } else {
+    consultStore.setIllnessType(0)
+  }
+  router.push(`/doctorDetail/${props.item.id}`)
 }
 </script>
 
 <template>
-  <div class="doctor-card" @click="$router.push(`/doctorDetail/${item.id}`)">
+  <div class="doctor-card" @click="goDoctorDetail">
     <img :src="item.avatar" class="avator" alt="" />
     <div class="detail">
       <p>
