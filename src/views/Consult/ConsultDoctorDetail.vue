@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useFollow } from '@/composables'
 import { getDoctorDetail } from '@/services/consult'
+import { useConsultStore } from '@/stores'
 import type { Doctor } from '@/types/consult'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -17,6 +19,12 @@ onMounted(() => {
   loadData()
 })
 const { loading, follow } = useFollow('doc')
+const consultStore = useConsultStore()
+const router = useRouter()
+const askDoctor = () => {
+  consultStore.setDocId(doctor.value!.id)
+  router.push(`/consult/illness`)
+}
 </script>
 
 <template>
@@ -71,7 +79,7 @@ const { loading, follow } = useFollow('doc')
           </p>
           <p class="tips">最长24小时图文多次沟通</p>
         </div>
-        <span class="consult-btn">去咨询</span>
+        <span class="consult-btn" @click="askDoctor">去咨询</span>
       </div>
     </div>
 
@@ -94,7 +102,9 @@ const { loading, follow } = useFollow('doc')
     </div>
 
     <div class="bottom-content">
-      <van-button type="primary" round size="large">咨询医生</van-button>
+      <van-button type="primary" round size="large" @click="askDoctor"
+        >咨询医生</van-button
+      >
     </div>
   </div>
 </template>
