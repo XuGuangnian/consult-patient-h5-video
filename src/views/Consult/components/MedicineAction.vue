@@ -2,9 +2,11 @@
 import { createConsultOrder } from '@/services/consult'
 import MedicineCard from './MedicineCard.vue'
 import { useConsultStore } from '@/stores'
-import { showToast } from 'vant'
+import { showDialog, showToast } from 'vant'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getCreateOrderParams } from '@/utils/createOrderParams'
+import { ConsultType } from '@/enums'
 
 withDefaults(
   defineProps<{
@@ -47,9 +49,27 @@ const clear = () => {
 
 const router = useRouter()
 const onAskDocotor = async () => {
-  const { data } = await createConsultOrder(consultStore.consult)
-  consultStore.clear()
-  router.push(`/room?orderId=${data.id}&from=medicine`)
+  const medicines = consultStore.consult.medicines || []
+  if (medicines?.length === 0) return showToast('请先选药')
+  const params = getCreateOrderParams(
+    consultStore.consult,
+    ConsultType.Medication
+  )
+  // console.log(params)
+  try {
+    const { data } = await createConsultOrder(params)
+    router.push(`/room?orderId=${data.id}&from=medicine`)
+  } catch (e) {
+    return showDialog({
+      title: '温馨提示',
+      message: '问诊信息不完整请重新填写',
+      closeOnPopstate: false
+    }).then(() => {
+      router.push('/')
+    })
+  } finally {
+    consultStore.clear()
+  }
 }
 
 const onAddToCart = () => {

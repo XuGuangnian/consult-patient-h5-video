@@ -22,7 +22,7 @@ const onChange = (value: string, detail: { name: string }) => {
       quantity: value
     })
   }
-  consultStore.setMedicines(medicines)
+  consultStore.setMedicines(medicines.filter((item) => +item.quantity > 0))
 }
 
 watch(

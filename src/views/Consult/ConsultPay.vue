@@ -11,15 +11,22 @@ import type { Patient } from '@/types/user'
 import { showConfirmDialog, showDialog, showToast } from 'vant'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { ConsultType } from '@/enums'
+import { getCreateOrderParams } from '@/utils/createOrderParams'
 // 预支付信息
 const payInfo = ref<ConsultOrderPreData>()
 const store = useConsultStore()
 
+/**
+ * ConsultPay页面，只有问医生和极速问诊才有该流程
+ */
 const loadData = async () => {
+  // 问医生和极速问诊都需要type和illnessType
   const params: ConsultOrderPreParams = {
     type: store.consult.type,
     illnessType: store.consult.illnessType
   }
+  // 问医生需要带上docId
   if (store.consult.docId) {
     params.docId = store.consult.docId
   }
@@ -48,6 +55,10 @@ onMounted(() => {
     'consultFlag',
     'patientId'
   ]
+  if (store.consult.type === ConsultType.Doctor) {
+    // 问医生，必填字段加一个docId
+    validKeys.push('docId')
+  }
   const valid = validKeys.every((key) => store.consult[key] !== undefined)
   if (!valid) {
     return showDialog({
@@ -74,8 +85,11 @@ const orderId = ref('')
 const submit = async () => {
   if (!agree.value) return showToast('请勾选我同意支付协议')
   loading.value = true
+  const type = store.consult.type
+  const params = getCreateOrderParams(store.consult, type)
+  // console.log(params)
   // 发送生成订单的请求
-  const res = await createConsultOrder(store.consult)
+  const res = await createConsultOrder(params)
   loading.value = false
   store.clear()
   orderId.value = res.data.id
