@@ -116,6 +116,11 @@ const onAddToCart = () => {
 <style scoped lang="scss">
 .medicine-detail-page {
   padding: 46px 0px 45px;
+  .van-swipe {
+    img {
+      width: 100%;
+    }
+  }
 
   .detail-top {
     padding: 15px;
