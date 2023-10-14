@@ -9,7 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const mobile = ref('13211112222')
 const password = ref('abc12345')
-const agree = ref(false)
+const agree = ref(true)
 
 const store = useUserStore()
 const router = useRouter()

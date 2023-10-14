@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { TopDep } from '@/types/consult'
+import { useConsultStore } from '@/stores'
+import type { SubDep, TopDep } from '@/types/consult'
 import { ref } from 'vue'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   depts: TopDep[]
@@ -9,6 +11,13 @@ const props = defineProps<{
 
 const showDepts = computed(() => props.depts[0]?.child || [])
 const show = ref(false)
+
+const router = useRouter()
+const consultStore = useConsultStore()
+const goFindDoctorByDepId = (item: SubDep) => {
+  consultStore.setDep(item.id)
+  router.push(`/doctorList/${item?.id}?department=${item?.name}`)
+}
 </script>
 
 <template>
@@ -23,9 +32,7 @@ const show = ref(false)
     <div class="department-list">
       <div
         class="department-item"
-        @click="
-          $router.push(`/doctorList/${item?.id}?department=${item?.name}`)
-        "
+        @click="goFindDoctorByDepId(item)"
         v-for="item in showDepts"
         :key="item.id"
       >
@@ -43,9 +50,7 @@ const show = ref(false)
           <p class="department-header">{{ item.name }}</p>
           <div class="mb-20">
             <span
-              @click="
-                $router.push(`/doctorList/${sub?.id}?department=${sub?.name}`)
-              "
+              @click="goFindDoctorByDepId(sub)"
               class="department-text"
               v-for="sub in item.child"
               :key="sub.id"

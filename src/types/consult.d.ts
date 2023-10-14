@@ -218,7 +218,10 @@ export type MedicineIllness = Pick<
 >
 
 // 问诊订单预支付传参
-export type ConsultOrderPreParams = Pick<PartialConsult, 'type' | 'illnessType'>
+export type ConsultOrderPreParams = Pick<
+  PartialConsult,
+  'type' | 'illnessType' | 'docId'
+>
 
 // 问诊订单预支付信息
 export type ConsultOrderPreData = {

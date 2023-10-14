@@ -2,7 +2,11 @@
 import { createConsultOrder, getConsultOrderPre } from '@/services/consult'
 import { getPatientDetail } from '@/services/user'
 import { useConsultStore } from '@/stores'
-import type { ConsultOrderPreData, PartialConsult } from '@/types/consult'
+import type {
+  ConsultOrderPreData,
+  ConsultOrderPreParams,
+  PartialConsult
+} from '@/types/consult'
 import type { Patient } from '@/types/user'
 import { showConfirmDialog, showDialog, showToast } from 'vant'
 import { onMounted, ref } from 'vue'
@@ -10,11 +14,16 @@ import { onBeforeRouteLeave, useRouter } from 'vue-router'
 // 预支付信息
 const payInfo = ref<ConsultOrderPreData>()
 const store = useConsultStore()
+
 const loadData = async () => {
-  const res = await getConsultOrderPre({
+  const params: ConsultOrderPreParams = {
     type: store.consult.type,
     illnessType: store.consult.illnessType
-  })
+  }
+  if (store.consult.docId) {
+    params.docId = store.consult.docId
+  }
+  const res = await getConsultOrderPre(params)
   payInfo.value = res.data
   // 记录优惠券ID
   store.setCoupon(res.data.couponId)

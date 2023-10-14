@@ -69,6 +69,7 @@ watch(
         v-for="item in list"
         :key="item.id"
         :item="item"
+        :grade="grade"
       ></doctor-card>
     </van-list>
   </div>

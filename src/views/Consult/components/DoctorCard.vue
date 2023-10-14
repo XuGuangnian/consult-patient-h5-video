@@ -1,9 +1,24 @@
 <script setup lang="ts">
+import { useConsultStore } from '@/stores'
 import type { Doctor } from '@/types/consult'
+import { useRouter } from 'vue-router'
 
-defineProps<{
+const props = defineProps<{
   item: Doctor
+  grade?: string
 }>()
+
+const router = useRouter()
+const consultStore = useConsultStore()
+const askDoctor = () => {
+  consultStore.setDocId(props.item.id)
+  if (props.grade === '9') {
+    consultStore.setIllnessType(1)
+  } else {
+    consultStore.setIllnessType(0)
+  }
+  router.push(`/consult/illness`)
+}
 </script>
 
 <template>
@@ -29,7 +44,7 @@ defineProps<{
       </p>
       <p class="bottom-content">
         <span class="price">¥{{ item.serviceFee }}</span
-        ><span class="btn">问医生</span>
+        ><span class="btn" @click="askDoctor">问医生</span>
       </p>
     </div>
   </div>

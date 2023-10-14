@@ -48,8 +48,8 @@ export const fertilityStatusOptions = [
 
 // 医院等级
 export const gradeOptions = [
-  { label: '三级甲等', value: '9' },
-  { label: '特等', value: '10' }
+  { label: '三级甲等', value: '9' }
+  // { label: '特等', value: '10' }
 ]
 
 // 医师职称
