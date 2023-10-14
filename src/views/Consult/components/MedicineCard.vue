@@ -73,6 +73,7 @@ const onGoDetail = () => {
 
 <style scoped lang="scss">
 .item {
+  position: relative;
   display: flex;
   padding: 15px 0;
   .img {
@@ -123,11 +124,33 @@ const onGoDetail = () => {
     padding: 4px 10px;
     color: var(--cp-tip);
   }
-  .hide {
+  .van-stepper {
+    position: absolute;
+    right: 0;
+    bottom: 15px;
     :deep() {
-      .van-stepper__minus,
       .van-stepper__input {
-        visibility: hidden;
+        background: none;
+      }
+      .van-stepper__minus {
+        background-color: #fff;
+        border: 0.5px solid #16c2a3;
+      }
+      .van-stepper__plus {
+        background-color: #eaf8f6;
+      }
+      .van-stepper__minus,
+      .van-stepper__plus {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    &.hide {
+      :deep() {
+        .van-stepper__minus,
+        .van-stepper__input {
+          visibility: hidden;
+        }
       }
     }
   }
