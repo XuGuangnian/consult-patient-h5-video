@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFollow } from '@/composables'
 import { getDoctorDetail } from '@/services/consult'
 import type { Doctor } from '@/types/consult'
 import { onMounted } from 'vue'
@@ -15,6 +16,7 @@ const loadData = async () => {
 onMounted(() => {
   loadData()
 })
+const { loading, follow } = useFollow('doc')
 </script>
 
 <template>
@@ -23,11 +25,17 @@ onMounted(() => {
     <div class="basic-info-bg">
       <div class="basic-info-content">
         <p class="avator-line">
-          <img alt="" class="doctor-avator" :src="doctor.avatar" /><span
+          <img alt="" class="doctor-avator" :src="doctor.avatar" />
+          <van-button
             class="follow-btn"
+            round
+            size="small"
+            type="primary"
+            @click="follow(doctor)"
+            :loading="loading"
           >
             {{ doctor.likeFlag === 1 ? '已关注' : '+ 关注' }}
-          </span>
+          </van-button>
         </p>
         <p class="doctor-line">
           <span class="doctor-name">{{ doctor.name }}</span
@@ -116,14 +124,12 @@ onMounted(() => {
           top: -23px;
         }
         .follow-btn {
+          width: 70px;
           display: inline-block;
-          border: 1px solid #2cb5a5;
-          border-radius: 14px;
           padding: 5px 15px;
           font-size: 11px;
           font-family: PingFang SC, PingFang SC-Regular;
           font-weight: 400;
-          color: #2cb5a5;
         }
       }
       .doctor-line {
